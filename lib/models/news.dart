@@ -5,6 +5,7 @@ part 'news.g.dart';
 class NewsModel {
   @JsonKey(name: "status")
   String status;
+  Map<int, String> pp;
   @JsonKey(name: "totalResults")
   int totalResults;
   @JsonKey(name: "articles")

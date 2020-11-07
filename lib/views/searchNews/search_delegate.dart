@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:assignment/app_state_container.dart/state_model.dart';
 import 'package:assignment/blocs/search.dart';
 import 'package:assignment/components/cache_netwrok_image.dart';
+import 'package:assignment/components/svg_icon.dart';
 import 'package:assignment/constants/constant.dart';
 import 'package:assignment/events/news.dart';
 import 'package:assignment/models/news.dart';
 import 'package:assignment/states/common_state.dart';
+import 'package:assignment/theme/theme_config.dart';
+import 'package:assignment/utils/Svg_IconsData.dart';
 import 'package:assignment/views/searchNews/search_results_page.dart';
 import 'package:assignment/views/searchNews/shimmer/word_suggestion_list.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +72,42 @@ class SearchAppBarDelegate extends SearchDelegate<String> with RouteAware {
           );
   }
 
+  // Action buttons at the right of search bar.
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return <Widget>[
+      query.isNotEmpty
+          ? Padding(
+              padding: const EdgeInsets.only(right: 6.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: 40,
+                    width: 40,
+                    padding: const EdgeInsets.only(right: 14.0),
+                    child: FlatButton(
+                      shape: CircleBorder(),
+                      padding: const EdgeInsets.only(top: 4),
+                      onPressed: () {
+                        query = '';
+                        showSuggestions(context);
+                      },
+                      child: SvgIconWidget(
+                        SvgIcons.close,
+                        height: 20,
+                        width: 20,
+                        color: ThemeConfiguration.themeDarkAccentColor,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+          : Container(),
+    ];
+  }
+
   @override
   Widget buildSuggestions(BuildContext context) {
     stateModel = ScopedModel.of<StateModel>(context);
@@ -102,12 +141,6 @@ class SearchAppBarDelegate extends SearchDelegate<String> with RouteAware {
         }
       },
     );
-  }
-
-  // Action buttons at the right of search bar.
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return <Widget>[];
   }
 }
 
@@ -258,24 +291,24 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
                     },
                   ),
                 ),
-                divider,
-                GestureDetector(
-                  onTap: () {
-                    widget.onViewAll();
-                  },
-                  child: Container(
-                    height: 35.0,
-                    padding: const EdgeInsets.only(
-                        left: 8.0, top: 10.0, bottom: 8.0),
-                    child: Text(
-                      "See interest over time",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
+                // divider,
+                // GestureDetector(
+                //   onTap: () {
+                //     widget.onViewAll();
+                //   },
+                //   child: Container(
+                //     height: 35.0,
+                //     padding: const EdgeInsets.only(
+                //         left: 8.0, top: 10.0, bottom: 8.0),
+                //     child: Text(
+                //       "See interest over time",
+                //       style: TextStyle(
+                //         color: Colors.grey,
+                //         decoration: TextDecoration.underline,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             );
           } else {

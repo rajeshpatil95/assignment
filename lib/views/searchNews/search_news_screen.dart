@@ -1,3 +1,4 @@
+import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/views/searchNews/search_delegate.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,13 @@ class _SearchNewsScreenState extends State<SearchNewsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Assignment"),
+        title: Text(
+          "Flutter Wiki",
+          style: Theme.of(context)
+              .textTheme
+              .display1
+              .copyWith(color: ThemeConfiguration.themeLightAccentColor),
+        ),
         centerTitle: true,
       ),
       body: Container(
@@ -37,7 +44,7 @@ class _SearchNewsScreenState extends State<SearchNewsScreen> {
         onPressed: () {
           showSearchPage(context, _searchDelegate);
         },
-        tooltip: 'Increment',
+        tooltip: 'Search',
         child: Icon(Icons.search),
       ),
     );
