@@ -1,4 +1,5 @@
 import 'package:assignment/components/custom_search_delegate.dart';
+import 'package:assignment/constants/constant.dart';
 import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/views/searchNews/search_delegate.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +38,30 @@ class _SearchNewsScreenState extends State<SearchNewsScreen> {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        alignment: Alignment.center,
-        child: Text("Hello Wolrd..!!"),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            alignment: Alignment.center,
+            height: 300,
+            child: Image.asset(
+              'assets/images/wiki_image.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Text(
+            "Flutter Wiki",
+            style: Theme.of(context)
+                .textTheme
+                .display2
+                .copyWith(color: ThemeConfiguration.themeDarkColor),
+          ),
+          sizeBoxH3,
+          Text("Click on the search icon to explore",
+              style: TextStyle(
+                  fontSize: 12, color: ThemeConfiguration.themeDarkColor)),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
