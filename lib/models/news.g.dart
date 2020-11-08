@@ -8,48 +8,69 @@ part of 'news.dart';
 
 NewsModel _$NewsModelFromJson(Map<String, dynamic> json) {
   return NewsModel(
-      status: json['status'] as String,
-      totalResults: json['totalResults'] as int,
-      articles: (json['articles'] as List)
-          ?.map((e) =>
-              e == null ? null : Articles.fromJson(e as Map<String, dynamic>))
-          ?.toList());
+      batchcomplete: json['batchcomplete'] as bool,
+      query: json['query'] == null
+          ? null
+          : Query.fromJson(json['query'] as Map<String, dynamic>));
 }
 
 Map<String, dynamic> _$NewsModelToJson(NewsModel instance) => <String, dynamic>{
-      'status': instance.status,
-      'totalResults': instance.totalResults,
-      'articles': instance.articles
+      'batchcomplete': instance.batchcomplete,
+      'query': instance.query
     };
 
-Articles _$ArticlesFromJson(Map<String, dynamic> json) {
-  return Articles(
-      source: json['source'] == null
-          ? null
-          : Source.fromJson(json['source'] as Map<String, dynamic>),
-      author: json['author'] as String,
+Query _$QueryFromJson(Map<String, dynamic> json) {
+  return Query(
+      pages: (json['pages'] as List)
+          ?.map((e) =>
+              e == null ? null : Pages.fromJson(e as Map<String, dynamic>))
+          ?.toList());
+}
+
+Map<String, dynamic> _$QueryToJson(Query instance) =>
+    <String, dynamic>{'pages': instance.pages};
+
+Pages _$PagesFromJson(Map<String, dynamic> json) {
+  return Pages(
+      pageid: json['pageid'] as int,
+      ns: json['ns'] as int,
       title: json['title'] as String,
-      description: json['description'] as String,
-      url: json['url'] as String,
-      urlToImage: json['urlToImage'] as String,
-      publishedAt: json['publishedAt'] as String,
-      content: json['content'] as String);
+      index: json['index'] as int,
+      thumbnail: json['thumbnail'] == null
+          ? null
+          : Thumbnail.fromJson(json['thumbnail'] as Map<String, dynamic>),
+      terms: json['terms'] == null
+          ? null
+          : Terms.fromJson(json['terms'] as Map<String, dynamic>));
 }
 
-Map<String, dynamic> _$ArticlesToJson(Articles instance) => <String, dynamic>{
-      'source': instance.source,
-      'author': instance.author,
+Map<String, dynamic> _$PagesToJson(Pages instance) => <String, dynamic>{
+      'pageid': instance.pageid,
+      'ns': instance.ns,
       'title': instance.title,
-      'description': instance.description,
-      'url': instance.url,
-      'urlToImage': instance.urlToImage,
-      'publishedAt': instance.publishedAt,
-      'content': instance.content
+      'index': instance.index,
+      'thumbnail': instance.thumbnail,
+      'terms': instance.terms
     };
 
-Source _$SourceFromJson(Map<String, dynamic> json) {
-  return Source(id: json['id'] as String, name: json['name'] as String);
+Thumbnail _$ThumbnailFromJson(Map<String, dynamic> json) {
+  return Thumbnail(
+      source: json['source'] as String,
+      width: json['width'] as int,
+      height: json['height'] as int);
 }
 
-Map<String, dynamic> _$SourceToJson(Source instance) =>
-    <String, dynamic>{'id': instance.id, 'name': instance.name};
+Map<String, dynamic> _$ThumbnailToJson(Thumbnail instance) => <String, dynamic>{
+      'source': instance.source,
+      'width': instance.width,
+      'height': instance.height
+    };
+
+Terms _$TermsFromJson(Map<String, dynamic> json) {
+  return Terms(
+      description:
+          (json['description'] as List)?.map((e) => e as String)?.toList());
+}
+
+Map<String, dynamic> _$TermsToJson(Terms instance) =>
+    <String, dynamic>{'description': instance.description};

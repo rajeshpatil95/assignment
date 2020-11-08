@@ -7,10 +7,10 @@ class NewsApiClient {
   final Dio dioNewsApi;
   NewsApiClient({this.dioNewsApi});
 
-  Future<Response> fetchTopHeadlines({BuildContext context}) async {
+  Future<Response> fetchTopHeadlines({BuildContext context, String searchText, int limit}) async {
     Response response;
     try {
-      response = await dioNewsApi.get(Api.TOP_HEADLINES(apiKey));
+      response = await dioNewsApi.get(Api.TOP_HEADLINES(searchText, limit));
     } on DioError catch (e) {
       response = e.response;
       throw e;
@@ -18,11 +18,11 @@ class NewsApiClient {
     return response;
   }
 
-  Future<Response> fetchEverything({BuildContext context}) async {
+  Future<Response> fetchEverything({BuildContext context, String searchText, int limit}) async {
     Response response;
 
     try {
-      response = await dioNewsApi.get(Api.EVERYTHING(apiKey));
+      response = await dioNewsApi.get(Api.EVERYTHING(searchText, limit));
     } on DioError catch (e) {
       response = e.response;
       throw e;

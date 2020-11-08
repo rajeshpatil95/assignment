@@ -71,13 +71,10 @@ class _MyAppState extends State<MyApp> {
     stateModel = StateModel();
     dioNewsApi = Dio();
 
-    //Magento
+    //Wiki Dio
     dioNewsApi.options
-      ..baseUrl = "https://newsapi.org"
-      ..contentType = "application/json"
-      ..headers = {
-        "Authorization": "Bearer ",
-      };
+      ..baseUrl = "https://en.wikipedia.org"
+      ..contentType = "application/json";
 
     _appObj = Application(
       dioNewsApi: dioNewsApi,

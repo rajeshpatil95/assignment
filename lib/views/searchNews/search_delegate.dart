@@ -3,12 +3,15 @@ import 'package:assignment/app_state_container.dart/state_model.dart';
 import 'package:assignment/blocs/search.dart';
 import 'package:assignment/components/cache_netwrok_image.dart';
 import 'package:assignment/components/svg_icon.dart';
+import 'package:assignment/components/custom_search_delegate.dart';
 import 'package:assignment/constants/constant.dart';
 import 'package:assignment/events/news.dart';
 import 'package:assignment/models/news.dart';
+import 'package:assignment/routers/routes.dart';
 import 'package:assignment/states/common_state.dart';
 import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/utils/Svg_IconsData.dart';
+import 'package:assignment/views/searchNews/search_description_page.dart';
 import 'package:assignment/views/searchNews/search_results_page.dart';
 import 'package:assignment/views/searchNews/shimmer/word_suggestion_list.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +19,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 //Search delegate
-class SearchAppBarDelegate extends SearchDelegate<String> with RouteAware {
+class SearchAppBarDelegate extends CustomSearchDelegate<String>
+    with RouteAware {
   final List<String> _words;
   final List<String> _history;
 
@@ -38,7 +42,8 @@ class SearchAppBarDelegate extends SearchDelegate<String> with RouteAware {
     if (this.query.length != 0) {
       debounceTimer = Timer(Duration(milliseconds: 500), () {
         BlocProvider.of<SearchBloc>(context)
-          ..add(FetchTopHeadlinesEventDispatched());
+          ..add(FetchTopHeadlinesEventDispatched(
+              context: context, searchText: this.query, limit: 20));
       });
     } else {}
   }
@@ -121,7 +126,8 @@ class SearchAppBarDelegate extends SearchDelegate<String> with RouteAware {
           return Center(
             child: Text("${error.errorMsg}"),
           );
-        } else if (searchBloc?.newsModelTopHeadings?.totalResults == 0 &&
+        } else if (searchBloc?.newsModelTopHeadings?.query?.pages?.length ==
+                0 &&
             this.query.length != 0) {
           return Center(child: Text('No results found..!!'));
         } else {
@@ -207,9 +213,18 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
     return children;
   }
 
-  Widget _suggestionProducts(context, index, NewsModel newsModelTopHeadings) {
+  Widget _suggestionProducts(
+      context, index, NewsModel newsModelTopHeadings, String searchQuery) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        // Navigator.pushNamed(context, Routes.searchDescriptionPage,
+        //     arguments: newsModelTopHeadings?.query?.pages[index]);
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new SearchDescriptionPage(
+                    page: newsModelTopHeadings?.query?.pages[index])));
+      },
       child: Container(
         decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: Colors.white, width: 4))),
@@ -225,15 +240,27 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                        alignment: Alignment.center,
-                        width: 80,
-                        child: CacheNetworkImageLoader(
-                          url:
-                              newsModelTopHeadings?.articles[index]?.urlToImage,
-                        )),
+                      alignment: Alignment.center,
+                      width: 80,
+                      child: newsModelTopHeadings
+                                  ?.query?.pages[index]?.thumbnail?.source !=
+                              null
+                          ? CacheNetworkImageLoader(
+                              url: newsModelTopHeadings?.query?.pages[index]
+                                      ?.thumbnail?.source ??
+                                  "",
+                              loadingImage: LOADING_IMAGE.IMAGE,
+                              fit: BoxFit.contain,
+                            )
+                          : Image.asset(
+                              'assets/images/wiki.png',
+                              fit: BoxFit.contain,
+                            ),
+                    ),
+                    sizeBoxW5,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Container(
                           width: MediaQuery.of(context).size.width - 120,
@@ -241,7 +268,21 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
                             text: TextSpan(
                               children: highlightOccurrences(
                                   newsModelTopHeadings
-                                          ?.articles[index]?.title ??
+                                          ?.query?.pages[index]?.title ??
+                                      '',
+                                  widget.query),
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                        sizeBoxH8,
+                        Container(
+                          width: MediaQuery.of(context).size.width - 120,
+                          child: RichText(
+                            text: TextSpan(
+                              children: highlightOccurrences(
+                                  newsModelTopHeadings?.query?.pages[index]
+                                          ?.terms?.description?.first ??
                                       '',
                                   widget.query),
                               style: TextStyle(color: Colors.grey),
@@ -267,11 +308,12 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
         child:
             BlocBuilder<SearchBloc, CommonAppStates>(builder: (context, state) {
           var newsModelTopHeadings;
-          if (searchBloc?.newsModelTopHeadings?.articles?.isNotEmpty ?? false) {
+          if (searchBloc?.newsModelTopHeadings?.query?.pages?.isNotEmpty ??
+              false) {
             newsModelTopHeadings = searchBloc?.newsModelTopHeadings;
           }
 
-          if (newsModelTopHeadings?.articles?.isNotEmpty ?? false) {
+          if (newsModelTopHeadings?.query?.pages?.isNotEmpty ?? false) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -284,10 +326,10 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
                 divider,
                 Expanded(
                   child: ListView.builder(
-                    itemCount: newsModelTopHeadings?.articles?.length ?? 0,
+                    itemCount: newsModelTopHeadings?.query?.pages?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
                       return _suggestionProducts(
-                          context, index, newsModelTopHeadings);
+                          context, index, newsModelTopHeadings, widget.query);
                     },
                   ),
                 ),

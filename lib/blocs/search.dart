@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:assignment/events/news.dart';
 import 'package:assignment/models/news.dart';
 import 'package:assignment/services/client/news.dart';
@@ -15,6 +14,8 @@ class SearchBloc extends Bloc<NewsEvent, CommonAppStates> {
 
   CommonAppStates fetchTopHeadlinesState, fetchEverythingState;
 
+  String topicDescription = "";
+
   @override
   CommonAppStates get initialState => Initial();
 
@@ -24,7 +25,10 @@ class SearchBloc extends Bloc<NewsEvent, CommonAppStates> {
     if (event is FetchTopHeadlinesEventDispatched) {
       yield fetchTopHeadlinesState = Loading();
       try {
-        final response = await newsApiClient.fetchTopHeadlines();
+        final response = await newsApiClient.fetchTopHeadlines(
+            context: event.context,
+            searchText: event.searchText,
+            limit: event.limit);
 
         this.newsModelTopHeadings = NewsModel.fromJson(response.data);
 
@@ -41,14 +45,22 @@ class SearchBloc extends Bloc<NewsEvent, CommonAppStates> {
     else if (event is FetchEverythingEventDispatched) {
       yield fetchEverythingState = Loading();
       try {
-        final response = await newsApiClient.fetchEverything();
+        final response = await newsApiClient.fetchEverything(
+            context: event.context,
+            searchText: event.searchText,
+            limit: event.limit);
 
-        this.newsModelEverything = NewsModel.fromJson(response.data);
+        Map<String, dynamic> jsonData = response.data['query']['pages'];
+        String pageId = jsonData.keys.toList()[
+            0]; // 0 for first page, you can iterate for multiple pages
+        var firstPage = jsonData[pageId];
+        topicDescription = firstPage["extract"];
 
         if (response.statusCode == 200) {
           yield fetchEverythingState = Success();
         }
       } catch (e) {
+        print("FetchEverythingEventDispatched Exception: ${e}");
         yield fetchEverythingState =
             Failed(errorMsg: "News TopHeadings api failed..!!");
       }

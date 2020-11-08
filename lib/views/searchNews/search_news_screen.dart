@@ -1,3 +1,4 @@
+import 'package:assignment/components/custom_search_delegate.dart';
 import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/views/searchNews/search_delegate.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _SearchNewsScreenState extends State<SearchNewsScreen> {
 
   void showSearchPage(
       BuildContext context, SearchAppBarDelegate searchDelegate) async {
-    showSearch<String>(context: context, delegate: searchDelegate);
+    customShowSearch<String>(context: context, delegate: searchDelegate);
   }
 
   @override

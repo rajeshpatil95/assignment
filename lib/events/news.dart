@@ -7,14 +7,18 @@ abstract class NewsEvent extends Equatable {
 
 class FetchTopHeadlinesEventDispatched extends NewsEvent {
   BuildContext context;
-  FetchTopHeadlinesEventDispatched({this.context});
+  String searchText;
+  int limit;
+  FetchTopHeadlinesEventDispatched({this.context, this.searchText, this.limit});
   @override
   String toString() => 'FetchTopHeadlinesEventDispatched';
 }
 
 class FetchEverythingEventDispatched extends NewsEvent {
   BuildContext context;
-  FetchEverythingEventDispatched({this.context});
+  String searchText;
+  int limit;
+  FetchEverythingEventDispatched({this.context, this.searchText, this.limit});
   @override
   String toString() => 'FetchEverythingEventDispatched';
 }

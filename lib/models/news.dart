@@ -3,15 +3,12 @@ part 'news.g.dart';
 
 @JsonSerializable()
 class NewsModel {
-  @JsonKey(name: "status")
-  String status;
-  Map<int, String> pp;
-  @JsonKey(name: "totalResults")
-  int totalResults;
-  @JsonKey(name: "articles")
-  List<Articles> articles;
+  @JsonKey(name: "batchcomplete")
+  bool batchcomplete;
+  @JsonKey(name: "query")
+  Query query;
 
-  NewsModel({this.status, this.totalResults, this.articles});
+  NewsModel({this.batchcomplete, this.query});
 
   factory NewsModel.fromJson(Map<String, dynamic> json) =>
       _$NewsModelFromJson(json);
@@ -19,48 +16,66 @@ class NewsModel {
 }
 
 @JsonSerializable()
-class Articles {
-  @JsonKey(name: "source")
-  Source source;
-  @JsonKey(name: "author")
-  String author;
-  @JsonKey(name: "title")
-  String title;
-  @JsonKey(name: "description")
-  String description;
-  @JsonKey(name: "url")
-  String url;
-  @JsonKey(name: "urlToImage")
-  String urlToImage;
-  @JsonKey(name: "publishedAt")
-  String publishedAt;
-  @JsonKey(name: "content")
-  String content;
+class Query {
+  @JsonKey(name: "pages")
+  List<Pages> pages;
 
-  Articles(
-      {this.source,
-      this.author,
-      this.title,
-      this.description,
-      this.url,
-      this.urlToImage,
-      this.publishedAt,
-      this.content});
+  Query({this.pages});
 
-  factory Articles.fromJson(Map<String, dynamic> json) =>
-      _$ArticlesFromJson(json);
-  Map<String, dynamic> toJson() => _$ArticlesToJson(this);
+  factory Query.fromJson(Map<String, dynamic> json) => _$QueryFromJson(json);
+  Map<String, dynamic> toJson() => _$QueryToJson(this);
 }
 
 @JsonSerializable()
-class Source {
-  @JsonKey(name: "id")
-  String id;
-  @JsonKey(name: "name")
-  String name;
+class Pages {
+  @JsonKey(name: "pageid")
+  int pageid;
+  @JsonKey(name: "ns")
+  int ns;
+  @JsonKey(name: "title")
+  String title;
+  @JsonKey(name: "index")
+  int index;
+  @JsonKey(name: "thumbnail")
+  Thumbnail thumbnail;
+  @JsonKey(name: "terms")
+  Terms terms;
 
-  Source({this.id, this.name});
+  Pages(
+      {this.pageid,
+      this.ns,
+      this.title,
+      this.index,
+      this.thumbnail,
+      this.terms});
 
-  factory Source.fromJson(Map<String, dynamic> json) => _$SourceFromJson(json);
-  Map<String, dynamic> toJson() => _$SourceToJson(this);
+  factory Pages.fromJson(Map<String, dynamic> json) => _$PagesFromJson(json);
+  Map<String, dynamic> toJson() => _$PagesToJson(this);
+}
+
+@JsonSerializable()
+class Thumbnail {
+  @JsonKey(name: "source")
+  String source;
+  @JsonKey(name: "width")
+  int width;
+  @JsonKey(name: "height")
+  int height;
+
+  Thumbnail({this.source, this.width, this.height});
+
+  factory Thumbnail.fromJson(Map<String, dynamic> json) =>
+      _$ThumbnailFromJson(json);
+  Map<String, dynamic> toJson() => _$ThumbnailToJson(this);
+}
+
+@JsonSerializable()
+class Terms {
+  @JsonKey(name: "description")
+  List<String> description;
+
+  Terms({this.description});
+
+  factory Terms.fromJson(Map<String, dynamic> json) => _$TermsFromJson(json);
+  Map<String, dynamic> toJson() => _$TermsToJson(this);
 }

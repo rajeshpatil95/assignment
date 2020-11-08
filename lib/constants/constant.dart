@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //API key
-String apiKey = "17d51eb402204967b27dabb543a51a76";
+String apiKey = "";
 
 /// Common Horizontal padding among all screens
 const horizontalPadding = const EdgeInsets.only(left: 10, right: 10);
