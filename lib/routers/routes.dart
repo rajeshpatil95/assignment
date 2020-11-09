@@ -1,5 +1,5 @@
 import 'package:assignment/routers/page_transition.dart';
-import 'package:assignment/views/searchNews/search_description_page.dart';
+import 'package:assignment/views/searchWiki/search_description_page.dart';
 import 'package:flutter/material.dart';
 
 class Routes {

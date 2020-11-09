@@ -10,7 +10,7 @@ class WikiBloc extends Bloc<WikiEvent, CommonAppStates> {
   final WikiApiClient wikiApiClient;
   WikiBloc({this.wikiApiClient});
 
-  WikiModel newsModelTopHeadings, newsModelEverything;
+  WikiModel wikiModelTopHeadings, wikiModelEverything;
 
   CommonAppStates fetchTopHeadlinesState, fetchEverythingState;
 
@@ -30,14 +30,14 @@ class WikiBloc extends Bloc<WikiEvent, CommonAppStates> {
             searchText: event.searchText,
             limit: event.limit);
 
-        this.newsModelTopHeadings = WikiModel.fromJson(response.data);
+        this.wikiModelTopHeadings = WikiModel.fromJson(response.data);
 
         if (response.statusCode == 200) {
           yield fetchTopHeadlinesState = Success();
         }
       } catch (e) {
         yield fetchTopHeadlinesState =
-            Failed(errorMsg: "News TopHeadings api failed..!!");
+            Failed(errorMsg: "Wiki TopHeadings api failed..!!");
       }
     }
 
@@ -62,7 +62,7 @@ class WikiBloc extends Bloc<WikiEvent, CommonAppStates> {
       } catch (e) {
         print("FetchEverythingEventDispatched Exception: ${e}");
         yield fetchEverythingState =
-            Failed(errorMsg: "News TopHeadings api failed..!!");
+            Failed(errorMsg: "Wiki TopHeadings api failed..!!");
       }
     }
   }

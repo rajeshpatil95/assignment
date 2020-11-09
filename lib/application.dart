@@ -13,9 +13,9 @@ class Application {
     if (_instance == null) {
       dioWikiApi = Dio();
 
-      //NewsApi Dio
+      //WikiApi Dio
       dioWikiApi.options
-        ..baseUrl = "https://newsapi.org"
+        ..baseUrl = "https://en.wikipedia.org"
         ..contentType = "application/json"
         ..headers = {
           "Authorization": "Bearer ",

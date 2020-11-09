@@ -1,7 +1,7 @@
 import 'package:assignment/components/custom_search_delegate.dart';
 import 'package:assignment/constants/constant.dart';
 import 'package:assignment/theme/theme_config.dart';
-import 'package:assignment/views/searchNews/search_delegate.dart';
+import 'package:assignment/views/searchWiki/search_delegate.dart';
 import 'package:flutter/material.dart';
 
 class SearchWikiScreen extends StatefulWidget {

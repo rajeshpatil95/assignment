@@ -11,9 +11,8 @@ import 'package:assignment/routers/routes.dart';
 import 'package:assignment/states/common_state.dart';
 import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/utils/Svg_IconsData.dart';
-import 'package:assignment/views/searchNews/search_description_page.dart';
-import 'package:assignment/views/searchNews/search_results_page.dart';
-import 'package:assignment/views/searchNews/shimmer/word_suggestion_list.dart';
+import 'package:assignment/views/searchWiki/search_description_page.dart';
+import 'package:assignment/views/searchWiki/shimmer/word_suggestion_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -69,12 +68,7 @@ class SearchAppBarDelegate extends CustomSearchDelegate<String>
   @override
   Widget buildResults(BuildContext context) {
     stateModel = ScopedModel.of<StateModel>(context);
-    return this.query.length == 0
-        ? new Container()
-        : Scaffold(
-            backgroundColor: Colors.white,
-            body: SearchResultsPage(searchQuery: this.query),
-          );
+    return Container();
   }
 
   // Action buttons at the right of search bar.
@@ -126,7 +120,7 @@ class SearchAppBarDelegate extends CustomSearchDelegate<String>
           return Center(
             child: Text("${error.errorMsg}"),
           );
-        } else if (searchBloc?.newsModelTopHeadings?.query?.pages?.length ==
+        } else if (searchBloc?.wikiModelTopHeadings?.query?.pages?.length ==
                 0 &&
             this.query.length != 0) {
           return Center(child: Text('No results found..!!'));
@@ -214,16 +208,16 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
   }
 
   Widget _suggestionProducts(
-      context, index, WikiModel newsModelTopHeadings, String searchQuery) {
+      context, index, WikiModel wikiModelTopHeadings, String searchQuery) {
     return InkWell(
       onTap: () {
         // Navigator.pushNamed(context, Routes.searchDescriptionPage,
-        //     arguments: newsModelTopHeadings?.query?.pages[index]);
+        //     arguments: wikiModelTopHeadings?.query?.pages[index]);
         Navigator.push(
             context,
             new MaterialPageRoute(
                 builder: (context) => new SearchDescriptionPage(
-                    page: newsModelTopHeadings?.query?.pages[index])));
+                    page: wikiModelTopHeadings?.query?.pages[index])));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -242,11 +236,11 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
                     Container(
                       alignment: Alignment.center,
                       width: 80,
-                      child: newsModelTopHeadings
+                      child: wikiModelTopHeadings
                                   ?.query?.pages[index]?.thumbnail?.source !=
                               null
                           ? CacheNetworkImageLoader(
-                              url: newsModelTopHeadings?.query?.pages[index]
+                              url: wikiModelTopHeadings?.query?.pages[index]
                                       ?.thumbnail?.source ??
                                   "",
                               loadingImage: LOADING_IMAGE.IMAGE,
@@ -267,7 +261,7 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
                           child: RichText(
                             text: TextSpan(
                               children: highlightOccurrences(
-                                  newsModelTopHeadings
+                                  wikiModelTopHeadings
                                           ?.query?.pages[index]?.title ??
                                       '',
                                   widget.query),
@@ -281,7 +275,7 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
                           child: RichText(
                             text: TextSpan(
                               children: highlightOccurrences(
-                                  newsModelTopHeadings?.query?.pages[index]
+                                  wikiModelTopHeadings?.query?.pages[index]
                                           ?.terms?.description?.first ??
                                       '',
                                   widget.query),
@@ -307,13 +301,13 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
         listener: (context, state) {},
         child:
             BlocBuilder<WikiBloc, CommonAppStates>(builder: (context, state) {
-          var newsModelTopHeadings;
-          if (searchBloc?.newsModelTopHeadings?.query?.pages?.isNotEmpty ??
+          var wikiModelTopHeadings;
+          if (searchBloc?.wikiModelTopHeadings?.query?.pages?.isNotEmpty ??
               false) {
-            newsModelTopHeadings = searchBloc?.newsModelTopHeadings;
+            wikiModelTopHeadings = searchBloc?.wikiModelTopHeadings;
           }
 
-          if (newsModelTopHeadings?.query?.pages?.isNotEmpty ?? false) {
+          if (wikiModelTopHeadings?.query?.pages?.isNotEmpty ?? false) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -326,10 +320,10 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
                 divider,
                 Expanded(
                   child: ListView.builder(
-                    itemCount: newsModelTopHeadings?.query?.pages?.length ?? 0,
+                    itemCount: wikiModelTopHeadings?.query?.pages?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
                       return _suggestionProducts(
-                          context, index, newsModelTopHeadings, widget.query);
+                          context, index, wikiModelTopHeadings, widget.query);
                     },
                   ),
                 ),

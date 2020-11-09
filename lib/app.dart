@@ -3,7 +3,7 @@ import 'package:assignment/services/client/wiki.dart';
 import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/utils/connectivity.dart';
 import 'package:assignment/utils/data_connectivity.dart';
-import 'package:assignment/views/searchNews/search_wiki_screen.dart';
+import 'package:assignment/views/searchWiki/search_wiki_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
