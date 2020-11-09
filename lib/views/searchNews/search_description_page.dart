@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:assignment/blocs/search.dart';
 import 'package:assignment/components/cache_netwrok_image.dart';
 import 'package:assignment/components/no_internet_screen.dart';
-import 'package:assignment/events/news.dart';
-import 'package:assignment/models/news.dart';
+import 'package:assignment/events/wiki.dart';
+import 'package:assignment/models/wiki.dart';
 import 'package:assignment/states/common_state.dart';
 import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/utils/connectivity.dart';
@@ -22,13 +22,13 @@ class SearchDescriptionPage extends StatefulWidget {
 
 class _SearchDescriptionPageState extends State<SearchDescriptionPage> {
   bool hasConnection = true;
-  SearchBloc searchBloc;
+  WikiBloc searchBloc;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    searchBloc = BlocProvider.of<SearchBloc>(context);
+    searchBloc = BlocProvider.of<WikiBloc>(context);
     _fetchEverything();
   }
 
@@ -68,29 +68,28 @@ class _SearchDescriptionPageState extends State<SearchDescriptionPage> {
                     floating: false,
                     pinned: true,
                     flexibleSpace: FlexibleSpaceBar(
-                      centerTitle: true,
-                      title: Text("${widget.page.title}",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                          )),
-                      background: widget?.page?.thumbnail?.source != null
-                          ? CacheNetworkImageLoader(
-                              url: widget?.page?.thumbnail?.source ?? "",
-                              loadingImage: LOADING_IMAGE.IMAGE,
-                              fit: BoxFit.contain,
-                            )
-                          : Image.asset(
-                              'assets/images/wiki_image.png',
-                              fit: BoxFit.contain,
-                            ),
-                    ),
+                        centerTitle: true,
+                        title: Text("${widget.page.title}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                            )),
+                        background: widget?.page?.thumbnail?.source != null
+                            ? CacheNetworkImageLoader(
+                                url: widget?.page?.thumbnail?.source ?? "",
+                                loadingImage: LOADING_IMAGE.IMAGE,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                'assets/images/wiki_image.png',
+                                fit: BoxFit.cover,
+                              )),
                   ),
                 ];
               },
-              body: BlocListener<SearchBloc, CommonAppStates>(
+              body: BlocListener<WikiBloc, CommonAppStates>(
                 listener: (context, state) {},
-                child: BlocBuilder<SearchBloc, CommonAppStates>(
+                child: BlocBuilder<WikiBloc, CommonAppStates>(
                   builder: (context, state) {
                     if (searchBloc.fetchEverythingState is Loading) {
                       return Center(child: CircularProgressIndicator());

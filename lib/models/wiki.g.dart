@@ -1,20 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'news.dart';
+part of 'wiki.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-NewsModel _$NewsModelFromJson(Map<String, dynamic> json) {
-  return NewsModel(
+WikiModel _$WikiModelFromJson(Map<String, dynamic> json) {
+  return WikiModel(
       batchcomplete: json['batchcomplete'] as bool,
       query: json['query'] == null
           ? null
           : Query.fromJson(json['query'] as Map<String, dynamic>));
 }
 
-Map<String, dynamic> _$NewsModelToJson(NewsModel instance) => <String, dynamic>{
+Map<String, dynamic> _$WikiModelToJson(WikiModel instance) => <String, dynamic>{
       'batchcomplete': instance.batchcomplete,
       'query': instance.query
     };

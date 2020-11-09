@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 
 class Application {
   static Application _instance;
-  Dio dio, dioSalesforce, dioNewsApi;
-  Application({this.dioNewsApi});
+  Dio dioWikiApi;
+  Application({this.dioWikiApi});
 
   static Future<Application> get instance async {
     return await Application()._getInstance();
@@ -11,12 +11,10 @@ class Application {
 
   Future<Application> _getInstance() async {
     if (_instance == null) {
-      dio = Dio();
-      dioSalesforce = Dio();
-      dioNewsApi = Dio();
+      dioWikiApi = Dio();
 
       //NewsApi Dio
-      dioNewsApi.options
+      dioWikiApi.options
         ..baseUrl = "https://newsapi.org"
         ..contentType = "application/json"
         ..headers = {

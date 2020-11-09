@@ -4,14 +4,14 @@ import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/views/searchNews/search_delegate.dart';
 import 'package:flutter/material.dart';
 
-class SearchNewsScreen extends StatefulWidget {
-  SearchNewsScreen({Key key}) : super(key: key);
+class SearchWikiScreen extends StatefulWidget {
+  SearchWikiScreen({Key key}) : super(key: key);
 
   @override
-  _SearchNewsScreenState createState() => _SearchNewsScreenState();
+  _SearchWikiScreenState createState() => _SearchWikiScreenState();
 }
 
-class _SearchNewsScreenState extends State<SearchNewsScreen> {
+class _SearchWikiScreenState extends State<SearchWikiScreen> {
   SearchAppBarDelegate _searchDelegate;
 
   @override

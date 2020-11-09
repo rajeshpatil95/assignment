@@ -3,14 +3,14 @@ import 'package:assignment/constants/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class NewsApiClient {
-  final Dio dioNewsApi;
-  NewsApiClient({this.dioNewsApi});
+class WikiApiClient {
+  final Dio dioWikiApi;
+  WikiApiClient({this.dioWikiApi});
 
   Future<Response> fetchTopHeadlines({BuildContext context, String searchText, int limit}) async {
     Response response;
     try {
-      response = await dioNewsApi.get(Api.TOP_HEADLINES(searchText, limit));
+      response = await dioWikiApi.get(Api.TOP_HEADLINES(searchText, limit));
     } on DioError catch (e) {
       response = e.response;
       throw e;
@@ -22,7 +22,7 @@ class NewsApiClient {
     Response response;
 
     try {
-      response = await dioNewsApi.get(Api.EVERYTHING(searchText, limit));
+      response = await dioWikiApi.get(Api.EVERYTHING(searchText, limit));
     } on DioError catch (e) {
       response = e.response;
       throw e;

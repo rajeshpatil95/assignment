@@ -1,9 +1,9 @@
 import 'package:assignment/routers/routes.dart';
-import 'package:assignment/services/client/news.dart';
+import 'package:assignment/services/client/wiki.dart';
 import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/utils/connectivity.dart';
 import 'package:assignment/utils/data_connectivity.dart';
-import 'package:assignment/views/searchNews/search_news_screen.dart';
+import 'package:assignment/views/searchNews/search_wiki_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,7 +46,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool isLoading = false;
   StateModel stateModel;
-  Dio dioNewsApi;
+  Dio dioWikiApi;
   InternetConnectionStatus internetConnectionStatus;
 
   @override
@@ -69,15 +69,15 @@ class _MyAppState extends State<MyApp> {
   init() async {
     connectivity();
     stateModel = StateModel();
-    dioNewsApi = Dio();
+    dioWikiApi = Dio();
 
     //Wiki Dio
-    dioNewsApi.options
+    dioWikiApi.options
       ..baseUrl = "https://en.wikipedia.org"
       ..contentType = "application/json";
 
     _appObj = Application(
-      dioNewsApi: dioNewsApi,
+      dioWikiApi: dioWikiApi,
     );
   }
 
@@ -87,9 +87,9 @@ class _MyAppState extends State<MyApp> {
         model: stateModel,
         child: (MultiBlocProvider(
             providers: [
-              BlocProvider<SearchBloc>(
-                create: (context) => SearchBloc(
-                    newsApiClient: NewsApiClient(dioNewsApi: dioNewsApi)),
+              BlocProvider<WikiBloc>(
+                create: (context) => WikiBloc(
+                    wikiApiClient: WikiApiClient(dioWikiApi: dioWikiApi)),
               ),
             ],
             child: MaterialApp(
@@ -105,7 +105,7 @@ class _MyAppState extends State<MyApp> {
                 theme: ThemeConfiguration.defaultTheme(context),
                 navigatorObservers: [],
                 home: MaterialApp(
-                  home: Material(child: SearchNewsScreen()),
+                  home: Material(child: SearchWikiScreen()),
                 )))));
 
     if (internetConnectionStatus == InternetConnectionStatus.Connected)

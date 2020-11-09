@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
-abstract class NewsEvent extends Equatable {
-  NewsEvent([List props = const []]) : super(props);
+abstract class WikiEvent extends Equatable {
+  WikiEvent([List props = const []]) : super(props);
 }
 
-class FetchTopHeadlinesEventDispatched extends NewsEvent {
+class FetchTopHeadlinesEventDispatched extends WikiEvent {
   BuildContext context;
   String searchText;
   int limit;
@@ -14,7 +14,7 @@ class FetchTopHeadlinesEventDispatched extends NewsEvent {
   String toString() => 'FetchTopHeadlinesEventDispatched';
 }
 
-class FetchEverythingEventDispatched extends NewsEvent {
+class FetchEverythingEventDispatched extends WikiEvent {
   BuildContext context;
   String searchText;
   int limit;

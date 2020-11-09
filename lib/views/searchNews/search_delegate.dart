@@ -5,8 +5,8 @@ import 'package:assignment/components/cache_netwrok_image.dart';
 import 'package:assignment/components/svg_icon.dart';
 import 'package:assignment/components/custom_search_delegate.dart';
 import 'package:assignment/constants/constant.dart';
-import 'package:assignment/events/news.dart';
-import 'package:assignment/models/news.dart';
+import 'package:assignment/events/wiki.dart';
+import 'package:assignment/models/wiki.dart';
 import 'package:assignment/routers/routes.dart';
 import 'package:assignment/states/common_state.dart';
 import 'package:assignment/theme/theme_config.dart';
@@ -24,7 +24,7 @@ class SearchAppBarDelegate extends CustomSearchDelegate<String>
   final List<String> _words;
   final List<String> _history;
 
-  SearchBloc searchBloc;
+  WikiBloc searchBloc;
   Timer debounceTimer;
   StateModel stateModel;
 
@@ -41,7 +41,7 @@ class SearchAppBarDelegate extends CustomSearchDelegate<String>
 
     if (this.query.length != 0) {
       debounceTimer = Timer(Duration(milliseconds: 500), () {
-        BlocProvider.of<SearchBloc>(context)
+        BlocProvider.of<WikiBloc>(context)
           ..add(FetchTopHeadlinesEventDispatched(
               context: context, searchText: this.query, limit: 20));
       });
@@ -163,12 +163,12 @@ class _WordSuggestionList extends StatefulWidget {
 }
 
 class __WordSuggestionListState extends State<_WordSuggestionList> {
-  SearchBloc searchBloc;
+  WikiBloc searchBloc;
 
   @override
   initState() {
     super.initState();
-    searchBloc = BlocProvider.of<SearchBloc>(context);
+    searchBloc = BlocProvider.of<WikiBloc>(context);
   }
 
   @override
@@ -214,7 +214,7 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
   }
 
   Widget _suggestionProducts(
-      context, index, NewsModel newsModelTopHeadings, String searchQuery) {
+      context, index, WikiModel newsModelTopHeadings, String searchQuery) {
     return InkWell(
       onTap: () {
         // Navigator.pushNamed(context, Routes.searchDescriptionPage,
@@ -303,10 +303,10 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SearchBloc, CommonAppStates>(
+    return BlocListener<WikiBloc, CommonAppStates>(
         listener: (context, state) {},
         child:
-            BlocBuilder<SearchBloc, CommonAppStates>(builder: (context, state) {
+            BlocBuilder<WikiBloc, CommonAppStates>(builder: (context, state) {
           var newsModelTopHeadings;
           if (searchBloc?.newsModelTopHeadings?.query?.pages?.isNotEmpty ??
               false) {

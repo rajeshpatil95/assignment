@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:assignment/events/news.dart';
-import 'package:assignment/models/news.dart';
-import 'package:assignment/services/client/news.dart';
+import 'package:assignment/events/wiki.dart';
+import 'package:assignment/models/wiki.dart';
+import 'package:assignment/services/client/wiki.dart';
 import 'package:bloc/bloc.dart';
 import 'package:assignment/states/common_state.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SearchBloc extends Bloc<NewsEvent, CommonAppStates> {
-  final NewsApiClient newsApiClient;
-  SearchBloc({this.newsApiClient});
+class WikiBloc extends Bloc<WikiEvent, CommonAppStates> {
+  final WikiApiClient wikiApiClient;
+  WikiBloc({this.wikiApiClient});
 
-  NewsModel newsModelTopHeadings, newsModelEverything;
+  WikiModel newsModelTopHeadings, newsModelEverything;
 
   CommonAppStates fetchTopHeadlinesState, fetchEverythingState;
 
@@ -25,12 +25,12 @@ class SearchBloc extends Bloc<NewsEvent, CommonAppStates> {
     if (event is FetchTopHeadlinesEventDispatched) {
       yield fetchTopHeadlinesState = Loading();
       try {
-        final response = await newsApiClient.fetchTopHeadlines(
+        final response = await wikiApiClient.fetchTopHeadlines(
             context: event.context,
             searchText: event.searchText,
             limit: event.limit);
 
-        this.newsModelTopHeadings = NewsModel.fromJson(response.data);
+        this.newsModelTopHeadings = WikiModel.fromJson(response.data);
 
         if (response.statusCode == 200) {
           yield fetchTopHeadlinesState = Success();
@@ -45,7 +45,7 @@ class SearchBloc extends Bloc<NewsEvent, CommonAppStates> {
     else if (event is FetchEverythingEventDispatched) {
       yield fetchEverythingState = Loading();
       try {
-        final response = await newsApiClient.fetchEverything(
+        final response = await wikiApiClient.fetchEverything(
             context: event.context,
             searchText: event.searchText,
             limit: event.limit);
@@ -68,7 +68,7 @@ class SearchBloc extends Bloc<NewsEvent, CommonAppStates> {
   }
 
   @override
-  Stream<CommonAppStates> transformEvents(Stream<NewsEvent> events,
-          Stream<CommonAppStates> Function(NewsEvent p1) next) =>
+  Stream<CommonAppStates> transformEvents(Stream<WikiEvent> events,
+          Stream<CommonAppStates> Function(WikiEvent p1) next) =>
       events.switchMap(next);
 }

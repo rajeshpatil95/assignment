@@ -1,18 +1,18 @@
 import 'package:json_annotation/json_annotation.dart';
-part 'news.g.dart';
+part 'wiki.g.dart';
 
 @JsonSerializable()
-class NewsModel {
+class WikiModel {
   @JsonKey(name: "batchcomplete")
   bool batchcomplete;
   @JsonKey(name: "query")
   Query query;
 
-  NewsModel({this.batchcomplete, this.query});
+  WikiModel({this.batchcomplete, this.query});
 
-  factory NewsModel.fromJson(Map<String, dynamic> json) =>
-      _$NewsModelFromJson(json);
-  Map<String, dynamic> toJson() => _$NewsModelToJson(this);
+  factory WikiModel.fromJson(Map<String, dynamic> json) =>
+      _$WikiModelFromJson(json);
+  Map<String, dynamic> toJson() => _$WikiModelToJson(this);
 }
 
 @JsonSerializable()
