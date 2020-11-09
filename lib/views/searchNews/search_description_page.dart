@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:assignment/blocs/search.dart';
+import 'package:assignment/components/cache_netwrok_image.dart';
 import 'package:assignment/components/no_internet_screen.dart';
 import 'package:assignment/events/news.dart';
 import 'package:assignment/models/news.dart';
@@ -67,16 +68,23 @@ class _SearchDescriptionPageState extends State<SearchDescriptionPage> {
                     floating: false,
                     pinned: true,
                     flexibleSpace: FlexibleSpaceBar(
-                        centerTitle: true,
-                        title: Text("${widget.page.title}",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                            )),
-                        background: Image.network(
-                          widget.page.thumbnail.source,
-                          fit: BoxFit.cover,
-                        )),
+                      centerTitle: true,
+                      title: Text("${widget.page.title}",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                          )),
+                      background: widget?.page?.thumbnail?.source != null
+                          ? CacheNetworkImageLoader(
+                              url: widget?.page?.thumbnail?.source ?? "",
+                              loadingImage: LOADING_IMAGE.IMAGE,
+                              fit: BoxFit.contain,
+                            )
+                          : Image.asset(
+                              'assets/images/wiki_image.png',
+                              fit: BoxFit.contain,
+                            ),
+                    ),
                   ),
                 ];
               },
