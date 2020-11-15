@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:assignment/blocs/search.dart';
 import 'package:assignment/components/cache_netwrok_image.dart';
 import 'package:assignment/components/no_internet_screen.dart';
+import 'package:assignment/components/progress_indicator.dart';
 import 'package:assignment/events/wiki.dart';
 import 'package:assignment/models/wiki.dart';
 import 'package:assignment/states/common_state.dart';
@@ -10,6 +11,7 @@ import 'package:assignment/utils/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SearchDescriptionPage extends StatefulWidget {
   final Pages page;
@@ -22,7 +24,9 @@ class SearchDescriptionPage extends StatefulWidget {
 
 class _SearchDescriptionPageState extends State<SearchDescriptionPage> {
   bool hasConnection = true;
+  bool isLoading = true;
   WikiBloc searchBloc;
+  WebViewController _controller;
 
   @override
   void initState() {
@@ -52,6 +56,29 @@ class _SearchDescriptionPageState extends State<SearchDescriptionPage> {
   @override
   Widget build(BuildContext context) {
     if (hasConnection) {
+      //solution with web_view
+      // return Scaffold(
+      //   body: Stack(
+      //     children: [
+      //       WebView(
+      //         onPageStarted: (c) {},
+      //         onPageFinished: (s) {
+      //           setState(() {
+      //             isLoading = false;
+      //           });
+      //         },
+      //         onWebViewCreated: (c) {
+      //           _controller = c;
+      //           _controller.loadUrl(
+      //               'https://en.wikipedia.org/wiki/${widget.page.title ?? ''}');
+      //         },
+      //       ),
+      //       isLoading ? Center(child: CircularProgressIndicator()) : Container()
+      //     ],
+      //   ),
+      // );
+
+      //solution without web_view
       return WillPopScope(
           onWillPop: () => _onBackPressed(context),
           child: Scaffold(

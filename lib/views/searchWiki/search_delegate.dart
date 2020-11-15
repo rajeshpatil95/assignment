@@ -220,9 +220,6 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
 
   Widget _suggestionProducts(
       context, index, WikiModel wikiModelTopHeadings, String searchQuery) {
-    print(
-        "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk: ${wikiModelTopHeadings?.query?.pages[index]?.title}");
-
     return InkWell(
       onTap: () {
         // Navigator.pushNamed(context, Routes.searchDescriptionPage,
