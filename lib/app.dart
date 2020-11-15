@@ -3,6 +3,7 @@ import 'package:assignment/services/client/wiki.dart';
 import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/utils/connectivity.dart';
 import 'package:assignment/utils/data_connectivity.dart';
+import 'package:assignment/utils/sp_util.dart';
 import 'package:assignment/views/searchWiki/search_wiki_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,7 @@ class _MyAppState extends State<MyApp> {
   StateModel stateModel;
   Dio dioWikiApi;
   InternetConnectionStatus internetConnectionStatus;
+  SpUtil spUtil;
 
   @override
   void initState() {
@@ -70,6 +72,7 @@ class _MyAppState extends State<MyApp> {
     connectivity();
     stateModel = StateModel();
     dioWikiApi = Dio();
+    spUtil = await SpUtil.getInstance();
 
     //Wiki Dio
     dioWikiApi.options
@@ -78,6 +81,7 @@ class _MyAppState extends State<MyApp> {
 
     _appObj = Application(
       dioWikiApi: dioWikiApi,
+      spUtil: spUtil,
     );
   }
 

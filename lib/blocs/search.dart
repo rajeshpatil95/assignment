@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:assignment/app.dart';
 import 'package:assignment/events/wiki.dart';
 import 'package:assignment/models/wiki.dart';
 import 'package:assignment/services/client/wiki.dart';
+import 'package:assignment/utils/sp_util.dart';
 import 'package:bloc/bloc.dart';
 import 'package:assignment/states/common_state.dart';
 import 'package:rxdart/rxdart.dart';
@@ -31,6 +33,9 @@ class WikiBloc extends Bloc<WikiEvent, CommonAppStates> {
             limit: event.limit);
 
         this.wikiModelTopHeadings = WikiModel.fromJson(response.data);
+
+        application.spUtil.saveLastSearchValue(event.searchText);
+        application.spUtil.saveSearchData(jsonEncode(response.data));
 
         if (response.statusCode == 200) {
           yield fetchTopHeadlinesState = Success();

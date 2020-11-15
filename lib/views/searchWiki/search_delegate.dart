@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:assignment/app.dart';
 import 'package:assignment/app_state_container.dart/state_model.dart';
 import 'package:assignment/blocs/search.dart';
 import 'package:assignment/components/cache_netwrok_image.dart';
@@ -11,6 +13,7 @@ import 'package:assignment/routers/routes.dart';
 import 'package:assignment/states/common_state.dart';
 import 'package:assignment/theme/theme_config.dart';
 import 'package:assignment/utils/Svg_IconsData.dart';
+import 'package:assignment/utils/connectivity.dart';
 import 'package:assignment/views/searchWiki/search_description_page.dart';
 import 'package:assignment/views/searchWiki/shimmer/word_suggestion_list.dart';
 import 'package:flutter/material.dart';
@@ -158,11 +161,19 @@ class _WordSuggestionList extends StatefulWidget {
 
 class __WordSuggestionListState extends State<_WordSuggestionList> {
   WikiBloc searchBloc;
+  WikiModel localCachedData;
+  bool hasConnection = true;
 
   @override
   initState() {
     super.initState();
     searchBloc = BlocProvider.of<WikiBloc>(context);
+    checkConnection();
+  }
+
+  checkConnection() async {
+    hasConnection = await hasConnectivity();
+    if (mounted) setState(() {});
   }
 
   @override
@@ -209,6 +220,9 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
 
   Widget _suggestionProducts(
       context, index, WikiModel wikiModelTopHeadings, String searchQuery) {
+    print(
+        "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk: ${wikiModelTopHeadings?.query?.pages[index]?.title}");
+
     return InkWell(
       onTap: () {
         // Navigator.pushNamed(context, Routes.searchDescriptionPage,
@@ -295,61 +309,80 @@ class __WordSuggestionListState extends State<_WordSuggestionList> {
     );
   }
 
+  Future<void> getSearchLocalData() async {
+    if (application?.spUtil?.getSearchData != null) {
+      var data = application?.spUtil?.getSearchData;
+      var dataString = jsonDecode(data);
+      localCachedData = WikiModel.fromJson(dataString);
+      if (mounted) setState(() {});
+    }
+  }
+
+  Widget searchSuggestionsBuilder(WikiModel wikiModelTopHeadings) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        sizeBoxH10,
+        Text(
+          '  Search Suggestions',
+          style: TextStyle(color: Colors.grey),
+        ),
+        sizeBoxH10,
+        divider,
+        Expanded(
+          child: ListView.builder(
+            itemCount: wikiModelTopHeadings?.query?.pages?.length ?? 0,
+            itemBuilder: (BuildContext context, int index) {
+              return _suggestionProducts(
+                  context, index, wikiModelTopHeadings, widget.query);
+            },
+          ),
+        ),
+        // divider,
+        // GestureDetector(
+        //   onTap: () {
+        //     widget.onViewAll();
+        //   },
+        //   child: Container(
+        //     height: 35.0,
+        //     padding: const EdgeInsets.only(
+        //         left: 8.0, top: 10.0, bottom: 8.0),
+        //     child: Text(
+        //       "See interest over time",
+        //       style: TextStyle(
+        //         color: Colors.grey,
+        //         decoration: TextDecoration.underline,
+        //       ),
+        //     ),
+        //   ),
+        // ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WikiBloc, CommonAppStates>(
-        listener: (context, state) {},
-        child:
-            BlocBuilder<WikiBloc, CommonAppStates>(builder: (context, state) {
-          var wikiModelTopHeadings;
-          if (searchBloc?.wikiModelTopHeadings?.query?.pages?.isNotEmpty ??
-              false) {
-            wikiModelTopHeadings = searchBloc?.wikiModelTopHeadings;
-          }
+    getSearchLocalData();
 
-          if (wikiModelTopHeadings?.query?.pages?.isNotEmpty ?? false) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                sizeBoxH10,
-                Text(
-                  '  Search Suggestions',
-                  style: TextStyle(color: Colors.grey),
-                ),
-                sizeBoxH10,
-                divider,
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: wikiModelTopHeadings?.query?.pages?.length ?? 0,
-                    itemBuilder: (BuildContext context, int index) {
-                      return _suggestionProducts(
-                          context, index, wikiModelTopHeadings, widget.query);
-                    },
-                  ),
-                ),
-                // divider,
-                // GestureDetector(
-                //   onTap: () {
-                //     widget.onViewAll();
-                //   },
-                //   child: Container(
-                //     height: 35.0,
-                //     padding: const EdgeInsets.only(
-                //         left: 8.0, top: 10.0, bottom: 8.0),
-                //     child: Text(
-                //       "See interest over time",
-                //       style: TextStyle(
-                //         color: Colors.grey,
-                //         decoration: TextDecoration.underline,
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
-            );
-          } else {
-            return WordSuggestionListShimmer();
-          }
-        }));
+    if (hasConnection) {
+      return BlocListener<WikiBloc, CommonAppStates>(
+          listener: (context, state) {},
+          child:
+              BlocBuilder<WikiBloc, CommonAppStates>(builder: (context, state) {
+            var wikiModelTopHeadings;
+            if (searchBloc?.wikiModelTopHeadings?.query?.pages?.isNotEmpty ??
+                false) {
+              wikiModelTopHeadings = searchBloc?.wikiModelTopHeadings;
+            }
+
+            if (wikiModelTopHeadings?.query?.pages?.isNotEmpty ?? false) {
+              return searchSuggestionsBuilder(wikiModelTopHeadings);
+            } else {
+              return WordSuggestionListShimmer();
+            }
+          }));
+    }
+
+    return searchSuggestionsBuilder(localCachedData);
   }
 }
